@@ -1,0 +1,87 @@
+class Game{
+    field bool gameOn;
+    field Enemy enemy;
+    field Player player;
+
+    constructor Game new() {
+        let gameOn = true;
+        let player = Player.new(100, 200, 50, 30, 1);
+        let enemy = Enemy.new(100, 100, 25, 3);
+        return this;
+    }
+
+    method void updateGame(){
+        do player.movePlayer();
+        do enemy.MoveEnemy();
+        do collisionCheck();
+        do Screen.clearScreen();
+        do player.drawPlayer();
+        do enemy.drawEnemy();
+        return;
+    }
+    
+    method void run(){
+        while (gameOn = true){
+            do updateGame();
+            do Sys.wait(16);}
+        do Output.printString("Game Over!");
+        return;
+    }
+
+    method void dispose(){
+        do player.dispose();
+        do enemy.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void collisionCheck(){
+        var int enemyXpos, enemyYpos, enemyRad, playerXpos, playerYpos, playerXlen, playerYlen;
+        let enemyXpos = enemy.getXpos();
+        let enemyYpos = enemy.getYpos();
+        let enemyRad = enemy.getRad();
+        let playerXpos = player.getXpos();
+        let playerYpos = player.getYpos();
+        let playerXlen = player.getXlen();
+        let playerYlen = player.getYlen();
+
+        if (enemyXpos > (playerXpos + playerXlen + enemyRad)){return;}
+
+        if (enemyYpos > (playerYpos + playerYlen + enemyRad)){return;} 
+
+        if (enemyXpos < (playerXpos - enemyRad)){return;}
+
+        if (enemyYpos < (playerYpos - enemyRad)){return;}
+
+        if (enemyYpos < playerYpos){
+            if (enemyXpos < playerXpos){
+                let gameOn = basicLengthChecker(playerXpos,playerYpos,enemyXpos,enemyYpos,enemyRad);
+                return;}
+
+            if (enemyXpos > (playerXpos + playerXlen)){
+                let gameOn = basicLengthChecker((playerXpos + playerXlen),playerYpos,enemyXpos,enemyYpos,enemyRad);
+                return;}
+        }
+
+        if (enemyYpos > (playerYpos + playerYlen)){
+            if (enemyXpos < playerXpos){
+                let gameOn = basicLengthChecker(playerXpos,(playerYpos + playerYlen),enemyXpos,enemyYpos,enemyRad);
+                return;}
+
+            if (enemyXpos > (playerXpos + playerXlen)){
+                let gameOn = basicLengthChecker((playerXpos + playerXlen),(playerYpos + playerYlen),enemyXpos,enemyYpos,enemyRad);
+                return;}
+        }
+        let gameOn = false;
+        return;
+
+    }
+
+    method bool basicLengthChecker(int xpoint1, int ypoint1, int xpoint2, int ypoint2, int length){
+        if ((Math.sqrt((xpoint1-xpoint2)*(xpoint1-xpoint2))+((ypoint1-ypoint2)*(ypoint1-ypoint2))) > length){
+            return false;
+        }
+        return true;
+    }
+}
+

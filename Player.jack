@@ -1,0 +1,67 @@
+class Player{
+    field int xpos, ypos, xlen, ylen, speed;
+
+    constructor Player new(int xpos_c, int ypos_c, int xlen_c, int ylen_c, int speed_c){
+        let xpos = xpos_c;
+        let ypos = ypos_c;
+        let xlen = xlen_c;
+        let ylen = ylen_c;
+        let speed = speed_c;
+        return this;
+    }
+
+    method void drawPlayer(){
+        // Draws the player on the screen
+        do Screen.drawRectangle(xpos, ypos, (xpos + xlen), (ypos + ylen));
+        return;
+    }
+
+    method void movePlayer(){
+        // Get the key currently pressed
+        var char key;
+        let key =  Keyboard.keyPressed();
+        // Moves the player left if left is the key pressed
+        if (key = 130){
+            if ((xpos - speed) > 0){
+                let xpos = (xpos - speed);}
+            return;
+        }
+
+        // Moves the player up if up is the key pressed
+        if (key = 131){
+            if ((ypos - speed) > 0){
+                let ypos = (ypos - speed);}
+            return;
+        }
+
+        // Moves the player right if right is the key pressed
+        if (key = 132){
+            if ((xpos + speed + xlen) < 511){
+                let xpos = (xpos + speed);}
+            return;
+        }
+
+        // Moves the player down if down is the key pressed
+        if (key = 133){
+            if ((ypos + speed + ylen) < 255){
+                let ypos = (ypos + speed);}
+            return;
+        }
+        return;
+    }
+
+    method void dispose(){
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method int getXpos(){return xpos;}
+
+    method int getYpos(){return ypos;}
+
+    method int getXlen(){return xlen;}    
+
+    method int getYlen(){return ylen;}
+}
+
+
